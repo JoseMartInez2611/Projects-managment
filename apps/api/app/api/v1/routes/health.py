@@ -1,0 +1,33 @@
+from typing import Annotated, Literal
+
+from fastapi import APIRouter, Depends, Response, status
+from pydantic import BaseModel
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db.session import get_session
+
+router = APIRouter(tags=["health"])
+
+
+class HealthResponse(BaseModel):
+    status: Literal["ok", "degraded"]
+    db: Literal["ok", "down"]
+
+
+@router.get(
+    "/health",
+    response_model=HealthResponse,
+    responses={status.HTTP_503_SERVICE_UNAVAILABLE: {"model": HealthResponse}},
+)
+async def health(
+    response: Response,
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> HealthResponse:
+    try:
+        await session.execute(text("SELECT 1"))
+    except SQLAlchemyError:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return HealthResponse(status="degraded", db="down")
+    return HealthResponse(status="ok", db="ok")

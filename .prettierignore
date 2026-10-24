@@ -1,0 +1,6 @@
+node_modules
+dist
+pnpm-lock.yaml
+apps/api
+packages/api-client/openapi.json
+packages/api-client/src/schema.d.ts
