@@ -11,7 +11,7 @@ packages/api-client   Tipos TS generados desde el OpenAPI de la API
 ## Requisitos
 
 - Docker Desktop
-- Node >= 20.19 y pnpm 12 (`packageManager` en `package.json`)
+- Node >= 24.22.1 (ver `.nvmrc`; incluye los parches de seguridad de octubre 2026) y pnpm 12 (`packageManager` en `package.json`)
 - [uv](https://docs.astral.sh/uv/) (solo para correr lint/test/dev del backend fuera de Docker; instala Python 3.13 por su cuenta)
 
 ## Arranque rápido (Docker)
